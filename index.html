@@ -15,6 +15,13 @@ main{width:100%;max-width:1240px;margin:0 auto;padding:0 clamp(23px,5vw,70px) 40
 .tools,.list-label,.ticket,.dialog-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.tools{flex-wrap:wrap;padding-bottom:12px}.filters,.utility,.presets{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.filters button,.preset{background:transparent;color:var(--muted);border-color:var(--line)}.filters button[aria-pressed=true]{color:#f3f3ed;background:#282b25}.filters button span{margin-left:4px;color:var(--green);font-size:.72rem}.utility input{width:150px;margin:0;padding:8px 10px}.list-label{padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:8px 8px 0 0;font-size:.75rem;color:var(--muted);font-weight:650}.ticket{width:100%;text-align:left;background:transparent;color:#efefeb;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:13px 14px;min-height:63px;overflow-wrap:anywhere}.ticket:hover{background:#20221e;filter:none}.ticket-copy{display:grid;gap:4px}.ticket small{font-weight:500;color:var(--muted);font-size:.72rem}.ticket .badge{flex:none;border:1px solid #464b3f;color:#cbd8bc;border-radius:20px;padding:4px 8px}.ticket .done{color:var(--muted);border-color:var(--line)}.empty{padding:20px 13px}.reboot{margin:15px 0;padding-left:0}
 label{display:block;font-size:.84rem;font-weight:600}input,textarea{display:block;width:100%;padding:10px;margin:8px 0 14px;background:#111310;color:inherit;border:1px solid var(--line);border-radius:7px;font-size:16px}textarea{min-height:85px;resize:vertical}.presets{margin:12px 0 20px}.preset{color:var(--accent);min-height:35px}.label{font-size:.76rem;color:var(--muted)}dialog{width:min(94vw,560px);max-height:88dvh;color:inherit;margin:auto}dialog::backdrop{background:#080908b8}.dialog-top{margin-bottom:12px}.dialog-top h2{margin:0}.reply{border-left:2px solid #4d5e42;background:#1f221d;border-radius:5px;padding:10px 13px;margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}#thread h2{overflow-wrap:anywhere}#thread small{color:var(--muted)}#thread form{margin-top:18px}audio{display:block;max-width:100%;margin-top:7px}
 @media(max-width:640px){.workspace{display:block}.sidebar{height:auto;position:static;padding:12px 15px;gap:12px;border-right:0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto}.sidebar nav{display:flex;grid-row:2;grid-column:1/-1}.sidebar-footer{margin:auto 0}.identity{padding:0}.nav{min-height:37px}main{padding-inline:15px}.topbar{height:58px}.intro{margin:24px 0 22px}.tools{gap:8px}.utility{margin-left:auto}.ticket{padding-inline:9px}.list-label{padding-inline:9px}.filters button{padding-inline:9px}}
+
+:root{background:#171615;color:#f1ede7;--rail:#171615;--panel:#211f1d;--line:#37322e;--muted:#b6aaa0;--accent:#ebc6ad;--green:#cdb2a0}
+.workspace{display:block;width:min(100%,870px);margin:auto;min-height:100dvh;padding:0 clamp(17px,5vw,46px)}
+.sidebar{position:static;display:flex;flex-direction:row;align-items:center;height:auto;padding:17px 0;gap:24px;border:0;border-bottom:1px solid var(--line)}
+.identity{padding:0;flex:none}.mark{background:#322721;border-color:#4c3830;color:#f2c8b1;font-size:24px}.sidebar nav{display:flex;gap:5px}.nav[aria-current]{background:#2a2420;border-color:#43362e}.sidebar-footer{margin:0 0 0 auto}.signal{background:#d3a993}.topbar{height:63px;border-bottom:0}.topbar>span{font-weight:600;color:#cfaa95}
+main{padding:0 0 45px}.intro{margin:12px 0 38px}.intro h1{max-width:620px;font-size:clamp(2.45rem,6vw,4rem);font-family:Georgia,serif;font-weight:400;letter-spacing:-.055em;line-height:1.03}.intro p{margin-top:14px}.tools{border-bottom:1px solid var(--line);padding-bottom:13px}.filters button[aria-pressed=true]{background:#2d2621}.ticket:hover{background:#211e1a}.ticket .badge{border-color:#584537;color:#e4c5ae}.ticket .done{border-color:var(--line);color:var(--muted)}input,textarea{background:#191715}.reply{background:#29231e;border-color:#8a624d}button{color:#261a13}dialog::backdrop{background:#110d0bba}
+@media(max-width:640px){.sidebar{display:grid;grid-template-columns:1fr auto;gap:9px;padding:13px 0}.sidebar nav{grid-row:2;grid-column:1/-1;margin-left:-6px}.topbar{height:59px}.intro{margin:9px 0 27px}.ticket{padding-inline:5px}}
 </style>
 <script type="module">
 const config = {"url": "https://llpvckwiphlcsuglikoz.supabase.co", "key": "sb_publishable_JE4Fhre_x6mbAG3a81Kj9Q_ts6UB0u1", "pushKey": "BP0xbB_IZerAx7y4gTN2nnXNw11KLpIWqKLrEkFngNCaHfZB5Sm977rX1VEzXUKPQq1rWEw-1Mb5vb4hyZtG7cs"};
@@ -226,9 +233,9 @@ function showView(view) {
   const settings = view === "settings";
   $("history").hidden = settings;
   $("settings").hidden = !settings;
-  $("page-title").textContent = settings ? "Notificaciones" : "Incidencias";
-  $("description").textContent = settings ? "Elige cómo quieres recibir los avisos." : "Vuestro servicio técnico a distancia.";
-  $("breadcrumb").textContent = "Espacio compartido / " + $("page-title").textContent;
+  $("page-title").textContent = settings ? "Notificaciones" : "Para cuando estamos lejos.";
+  $("description").textContent = settings ? "Para enterarte cuando el otro se acuerde de ti." : "El teletransporte sigue en mantenimiento.";
+  $("breadcrumb").textContent = settings ? "Preferencias" : "Entre tú y yo";
   document.querySelectorAll("[data-view]").forEach(button => {
     if (button.dataset.view === view) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
@@ -360,7 +367,7 @@ run(null, start);
 <body>
 <div class="workspace">
 <aside class="sidebar">
-<a class="identity" href="./"><span class="mark" aria-hidden="true">✳</span><span>Soporte técnico<small>de novios</small></span></a>
+<a class="identity" href="./"><span class="mark" aria-hidden="true">♡</span><span>Soporte técnico<small>de novios</small></span></a>
 <nav aria-label="Secciones">
 <button class="nav" data-view="history" aria-current="page"><span aria-hidden="true">▤</span> Incidencias</button>
 <button class="nav" id="show-settings" data-view="settings"><span aria-hidden="true">◉</span> Notificaciones</button>
@@ -368,8 +375,8 @@ run(null, start);
 <div class="sidebar-footer"><span class="signal"></span><span id="connection">Conectando</span><button id="logout" class="quiet" hidden>Salir</button></div>
 </aside>
 <main>
-<div class="topbar"><span id="breadcrumb">Espacio compartido / Incidencias</span><button id="compose" hidden>＋ Nueva incidencia</button></div>
-<section class="intro"><h1 id="page-title">Incidencias</h1><p id="description">Vuestro servicio técnico a distancia.</p></section>
+<div class="topbar"><span id="breadcrumb">Entre tú y yo</span><button id="compose" hidden>＋ Nueva incidencia</button></div>
+<section class="intro"><h1 id="page-title">Para cuando estamos lejos.</h1><p id="description">El teletransporte sigue en mantenimiento.</p></section>
 <p id="status" class="feedback" role="status"></p>
 <form id="login" class="panel login" hidden>
 <h2>Entrar al espacio compartido</h2>
@@ -389,7 +396,7 @@ run(null, start);
 </div>
 <div class="utility"><input type="search" id="search" placeholder="Buscar" aria-label="Buscar incidencias"><button class="quiet" id="refresh" aria-label="Actualizar incidencias" title="Actualizar">↻</button></div>
 </div>
-<div class="list-label"><span>Incidencia</span><span>Estado</span></div>
+
 <div id="tickets"></div>
 <button class="quiet reboot" id="reboot">↻ Reiniciar novio</button>
 </section>
