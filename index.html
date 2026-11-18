@@ -22,6 +22,7 @@ label{display:block;font-size:.84rem;font-weight:600}input,textarea{display:bloc
 .identity{padding:0;flex:none}.mark{background:#322721;border-color:#4c3830;color:#f2c8b1;font-size:24px}.sidebar nav{display:flex;gap:5px}.nav[aria-current]{background:#2a2420;border-color:#43362e}.sidebar-footer{margin:0 0 0 auto}.signal{background:#d3a993}.topbar{height:63px;border-bottom:0}.topbar>span{font-weight:600;color:#cfaa95}
 main{padding:0 0 45px}.intro{margin:12px 0 38px}.intro h1{max-width:620px;font-size:clamp(2.45rem,6vw,4rem);font-family:Georgia,serif;font-weight:400;letter-spacing:-.055em;line-height:1.03}.intro p{margin-top:14px}.tools{border-bottom:1px solid var(--line);padding-bottom:13px}.filters button[aria-pressed=true]{background:#2d2621}.ticket:hover{background:#211e1a}.ticket .badge{border-color:#584537;color:#e4c5ae}.ticket .done{border-color:var(--line);color:var(--muted)}input,textarea{background:#191715}.reply{background:#29231e;border-color:#8a624d}button{color:#261a13}dialog::backdrop{background:#110d0bba}
 @media(max-width:640px){.sidebar{display:grid;grid-template-columns:1fr auto;gap:9px;padding:13px 0}.sidebar nav{grid-row:2;grid-column:1/-1;margin-left:-6px}.topbar{height:59px}.intro{margin:9px 0 27px}.ticket{padding-inline:5px}}
+#memory-list{margin-top:15px;border-top:1px solid var(--line)}.memory-text{white-space:pre-wrap;overflow-wrap:anywhere}.memory-photo{display:block;max-width:100%;max-height:55vh;margin:14px auto;border-radius:9px;object-fit:contain}.sidebar nav{flex-wrap:wrap}
 </style>
 <script type="module">
 const config = {"url": "https://llpvckwiphlcsuglikoz.supabase.co", "key": "sb_publishable_JE4Fhre_x6mbAG3a81Kj9Q_ts6UB0u1", "pushKey": "BP0xbB_IZerAx7y4gTN2nnXNw11KLpIWqKLrEkFngNCaHfZB5Sm977rX1VEzXUKPQq1rWEw-1Mb5vb4hyZtG7cs"};
@@ -91,16 +92,17 @@ function renderTickets() {
   }
 }
 
-async function createTicket(title) {
+async function createTicket(title, description) {
+  description = description.trim() || null;
   title = title.trim();
   if (!title) throw Error("Escribe un título para el ticket.");
   let id;
   if (demo) {
     id = crypto.randomUUID();
-    tickets.unshift({ id, title, author: { name: demoName }, created_at: new Date(), replies: [] });
+    tickets.unshift({ id, title, description, author: { name: demoName }, created_at: new Date(), replies: [] });
     saveDemo();
   } else {
-    const ticket = await value(db.from("tickets").insert({ title, author_id: member.id }).select("id").single());
+    const ticket = await value(db.from("tickets").insert({ title, ...(descriptionsEnabled ? { description } : {}), author_id: member.id }).select("id").single());
     id = ticket.id;
   }
   await loadTickets();
@@ -117,6 +119,12 @@ async function openTicket(id) {
   const thread = $("thread");
   thread.replaceChildren(element("h2", ticket.title), element("small",
     `${ticket.author.name} · ${date(ticket.created_at)} · ${ticket.closed ? "Resuelto 💛" : "Abierto"}`));
+  if (ticket.description) {
+    const note = element("p", ticket.description);
+    note.style.whiteSpace = "pre-wrap";
+    note.style.overflowWrap = "anywhere";
+    thread.append(note);
+  }
   for (const reply of replies) {
     const card = element("div", "", "reply");
     card.append(element("small", `${reply.author.name} · ${date(reply.created_at)}`));
@@ -228,19 +236,146 @@ async function record(button, reply, feedback) {
   };
 }
 
+let memories = [];
+let memoriesEnabled = demo;
+let descriptionsEnabled = demo;
+const memoryFeedback = message => { $("memory-status").textContent = message; };
+
+async function loadMemories() {
+  if (demo) {
+    memories = JSON.parse(localStorage.getItem("soporte-recuerdos") || "[]");
+  } else {
+    memories = await value(db.from("memories")
+      .select("id,description,created_at,author:members(name),hearts:memory_hearts(member_id)")
+      .order("created_at", { ascending: false }).limit(100));
+  }
+  const list = $("memory-list");
+  list.replaceChildren();
+  if (!memories.length) list.append(element("p", "Aquí podéis guardar las cosas que os recuerdan al otro.", "empty"));
+  for (const memory of memories) {
+    const button = element("button", "", "ticket");
+    const copy = element("span", "", "ticket-copy");
+    const title = memory.description?.split("\n")[0].trim();
+    copy.append(element("span", title ? title.slice(0, 110) + (title.length > 110 ? "…" : "") : "Un recuerdo en foto"),
+      element("small", `${memory.author.name} · ${date(memory.created_at)}`));
+    button.append(copy, element("small", memory.hearts.length ? `♥ ${memory.hearts.length}` : "Ver recuerdo", "badge"));
+    button.onclick = () => run(button, () => openMemory(memory.id), memoryFeedback);
+    list.append(button);
+  }
+}
+
+async function openMemory(id) {
+  const memory = demo ? memories.find(item => item.id === id) : await value(db.from("memories")
+    .select("*,author:members(name),hearts:memory_hearts(member_id)").eq("id", id).maybeSingle());
+  if (!memory) throw Error("Este recuerdo ya no está disponible.");
+  const content = $("memory-content");
+  content.replaceChildren(element("small", `${memory.author.name} · ${date(memory.created_at)}`));
+  if (memory.photo) {
+    const photo = document.createElement("img");
+    photo.src = memory.photo;
+    photo.alt = "Foto del recuerdo";
+    photo.className = "memory-photo";
+    content.append(photo);
+  }
+  if (memory.description) content.append(element("p", memory.description, "memory-text"));
+  const memberId = demo ? "demo" : member.id;
+  const liked = memory.hearts.some(heart => heart.member_id === memberId);
+  const heart = element("button", liked ? "♥ Quitar corazón" : "♡ Dejar un corazón", "quiet");
+  heart.setAttribute("aria-pressed", String(liked));
+  const feedback = element("p", "", "feedback");
+  feedback.setAttribute("role", "status");
+  heart.onclick = () => run(heart, async () => {
+    if (demo) {
+      memory.hearts = liked ? [] : [{ member_id: memberId }];
+      localStorage.setItem("soporte-recuerdos", JSON.stringify(memories));
+    } else if (liked) {
+      await value(db.from("memory_hearts").delete().eq("memory_id", id).eq("member_id", memberId));
+    } else {
+      await value(db.from("memory_hearts").insert({ memory_id: id, member_id: memberId }));
+    }
+    await loadMemories();
+    await openMemory(id);
+  }, message => { feedback.textContent = message; });
+  content.append(heart, feedback);
+  if (!$("memory-detail").open) $("memory-detail").showModal();
+}
+
+async function compressPhoto(file) {
+  if (file.size > 20 * 1024 * 1024) throw Error("Elige una foto de menos de 20 MB.");
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.src = url;
+    try { await image.decode(); }
+    catch { throw Error("No se pudo leer la foto. Prueba con un JPEG o PNG."); }
+    const canvas = document.createElement("canvas");
+    const size = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * size));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * size));
+    const context = canvas.getContext("2d");
+    if (!context) throw Error("No se pudo preparar la foto.");
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    for (const quality of [0.82, 0.65, 0.45, 0.25]) {
+      const photo = canvas.toDataURL("image/jpeg", quality);
+      if (photo.startsWith("data:image/jpeg;") && photo.length <= 700000) return photo;
+    }
+    throw Error("La foto es demasiado grande. Prueba con una imagen más pequeña.");
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+$("new-memory").onclick = () => {
+  $("memory-form-status").textContent = "";
+  $("memory-composer").showModal();
+};
+$("close-memory-composer").onclick = () => $("memory-composer").close();
+$("close-memory-detail").onclick = () => $("memory-detail").close();
+$("memory-form").onsubmit = event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  run(event.submitter, async () => {
+    const fields = new FormData(form);
+    const description = fields.get("description").trim() || null;
+    const file = fields.get("photo");
+    if (!description && !file.size) throw Error("Añade una foto o escribe una nota.");
+    const photo = file.size ? await compressPhoto(file) : null;
+    const id = crypto.randomUUID();
+    if (demo) {
+      const entries = [{ id, photo, description, author: { name: demoName }, created_at: new Date(), hearts: [] }, ...memories];
+      localStorage.setItem("soporte-recuerdos", JSON.stringify(entries));
+    } else {
+      await value(db.from("memories").insert({ id, description, photo, author_id: member.id }));
+    }
+    form.reset();
+    $("memory-composer").close();
+    await loadMemories();
+    await openMemory(id);
+  }, message => {
+    if ($("memory-composer").open) $("memory-form-status").textContent = message;
+    else memoryFeedback(message);
+  });
+};
+
 function showView(view) {
   if ($("app").hidden) return;
   const settings = view === "settings";
-  $("history").hidden = settings;
+  const remembering = view === "memories";
+  $("history").hidden = view !== "history";
+  $("memories").hidden = !remembering;
+  $("compose").hidden = view !== "history";
   $("settings").hidden = !settings;
-  $("page-title").textContent = settings ? "Notificaciones" : "Para cuando estamos lejos.";
-  $("description").textContent = settings ? "Para enterarte cuando el otro se acuerde de ti." : "El teletransporte sigue en mantenimiento.";
+  $("page-title").textContent = settings ? "Notificaciones" : remembering ? "Me acordé de ti" : "Para cuando estamos lejos.";
+  $("description").textContent = settings ? "Para enterarte cuando el otro se acuerde de ti." : remembering ? "Fotos y notas de las cosas que nos recuerdan al otro." : "El teletransporte sigue en mantenimiento.";
   $("breadcrumb").textContent = settings ? "Preferencias" : "Entre tú y yo";
   document.querySelectorAll("[data-view]").forEach(button => {
     if (button.dataset.view === view) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
   });
   if (settings) showSettings();
+  if (remembering) run(null, loadMemories, memoryFeedback);
 }
 
 function showSettings() {
@@ -262,10 +397,16 @@ async function activatePush() {
   if (permission !== "granted") throw Error("Puedes permitir los avisos desde los ajustes del navegador o del móvil.");
   const worker = await registration;
   if (!worker) throw Error("No se pudo preparar este móvil para los avisos.");
-  const sub = await worker.pushManager.getSubscription() ?? await worker.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: config.pushKey,
-  });
+  let sub = await worker.pushManager.getSubscription();
+  if (!sub) {
+    try {
+      sub = await worker.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: config.pushKey });
+    } catch (error) {
+      if (error.name !== "AbortError") throw error;
+      if (/Brave/.test(navigator.userAgent) || navigator.brave) throw Error("Brave no pudo registrar los avisos. En brave://settings/privacy activa «Usar los servicios de Google para mensajes push», reinicia Brave y vuelve a intentarlo. También puedes usar Chrome.");
+      throw Error("El navegador no pudo registrar los avisos. Abre la web en Safari o Chrome y vuelve a intentarlo.");
+    }
+  }
   await value(db.from("subscriptions").upsert({ member_id: member.id, endpoint: sub.endpoint, payload: sub.toJSON() }));
   $("push-help").textContent = "Avisos activados en este dispositivo.";
 }
@@ -292,6 +433,16 @@ async function start() {
     member = await value(db.from("members").select("id,name").eq("id", session.user.id).maybeSingle());
     if (!member) throw Error("Esta cuenta todavía no tiene acceso al servicio técnico.");
   }
+  if (!demo) {
+    const [memoriesCheck, descriptionsCheck] = await Promise.all([
+      db.from("memories").select("id", { head: true }).limit(0),
+      db.from("tickets").select("description", { head: true }).limit(0),
+    ]);
+    memoriesEnabled = !memoriesCheck.error;
+    descriptionsEnabled = !descriptionsCheck.error;
+  }
+  document.querySelector('[data-view="memories"]').hidden = !memoriesEnabled;
+  $("ticket-description-label").hidden = !descriptionsEnabled;
   await loadTickets();
   $("app").hidden = false;
   $("compose").hidden = false;
@@ -300,11 +451,19 @@ async function start() {
   if (!demo) {
     const worker = await registration;
     const subscribed = await worker?.pushManager?.getSubscription();
-    if (!subscribed && !sessionStorage.getItem("soporte-push-later") && !params.has("ticket")) showView("settings");
-    window.addEventListener("focus", () => run(null, loadTickets));
-    setInterval(() => { if (!document.hidden) run(null, loadTickets); }, 15000);
+    if (!subscribed && !sessionStorage.getItem("soporte-push-later") && !params.has("ticket") && !params.has("memory")) showView("settings");
+    const refresh = () => {
+      if (!$("memories").hidden) run(null, loadMemories, memoryFeedback);
+      else run(null, loadTickets);
+    };
+    window.addEventListener("focus", refresh);
+    setInterval(() => { if (!document.hidden) refresh(); }, 15000);
   }
   if (params.has("ticket")) await openTicket(params.get("ticket"));
+  if (memoriesEnabled && params.has("memory")) {
+    showView("memories");
+    await run(null, () => openMemory(params.get("memory")), memoryFeedback);
+  }
 }
 
 for (const title of presetTitles) {
@@ -331,7 +490,8 @@ $("logout").onclick = () => run($("logout"), async () => {
 $("new-ticket").onsubmit = event => {
   event.preventDefault();
   run(event.submitter, async () => {
-    await createTicket(new FormData(event.target).get("title"));
+    const data = new FormData(event.target);
+    await createTicket(data.get("title"), data.get("description"));
     event.target.reset();
   }, message => { $("compose-feedback").textContent = message; });
 };
@@ -370,6 +530,7 @@ run(null, start);
 <a class="identity" href="./"><span class="mark" aria-hidden="true">♡</span><span>Soporte técnico<small>de novios</small></span></a>
 <nav aria-label="Secciones">
 <button class="nav" data-view="history" aria-current="page"><span aria-hidden="true">▤</span> Incidencias</button>
+<button class="nav" data-view="memories" hidden><span aria-hidden="true">♡</span> Me acordé de ti</button>
 <button class="nav" id="show-settings" data-view="settings"><span aria-hidden="true">◉</span> Notificaciones</button>
 </nav>
 <div class="sidebar-footer"><span class="signal"></span><span id="connection">Conectando</span><button id="logout" class="quiet" hidden>Salir</button></div>
@@ -387,6 +548,11 @@ run(null, start);
 <section id="settings" class="panel notice" hidden>
 <h2>Avisos en este dispositivo</h2><p id="push-help">Recibe un aviso cuando llegue una incidencia o una respuesta.</p>
 <div class="actions"><button id="push">Activar notificaciones</button><button id="later" class="quiet">Volver a incidencias</button></div></section>
+<section id="memories" hidden>
+<button id="new-memory" type="button">＋ Dejar un recuerdo</button>
+<p id="memory-status" class="feedback" role="status"></p>
+<div id="memory-list"></div>
+</section>
 <section id="history">
 <div class="tools">
 <div class="filters" aria-label="Filtrar incidencias">
@@ -403,10 +569,23 @@ run(null, start);
 </div>
 </main>
 </div>
+<dialog id="memory-composer" aria-labelledby="memory-heading">
+<div class="dialog-top"><h2 id="memory-heading">Me acordé de ti</h2><button id="close-memory-composer" class="quiet" aria-label="Cerrar">×</button></div>
+<form id="memory-form">
+<label>Foto <input type="file" name="photo" accept="image/*"></label>
+<label>¿Qué te recordó a mí? <textarea name="description" maxlength="1000" rows="4" placeholder="Escribe una nota"></textarea></label>
+<p id="memory-form-status" class="feedback" role="status"></p>
+<button type="submit">Compartir recuerdo</button>
+</form>
+</dialog>
+<dialog id="memory-detail" aria-labelledby="memory-detail-heading">
+<div class="dialog-top"><h2 id="memory-detail-heading">Me acordé de ti</h2><button id="close-memory-detail" class="quiet" aria-label="Cerrar">×</button></div>
+<div id="memory-content"></div>
+</dialog>
 <dialog id="composer" aria-labelledby="compose-heading">
 <div class="dialog-top"><h2 id="compose-heading">Nueva incidencia</h2><button id="close-composer" class="quiet" aria-label="Cerrar">×</button></div>
 <div id="presets" class="presets"></div>
-<form id="new-ticket"><label>Título de la incidencia<input name="title" maxlength="120" required placeholder="¿Qué necesita el servicio técnico?"></label><p id="compose-feedback" class="feedback" role="status"></p><button>Enviar incidencia</button></form>
+<form id="new-ticket"><label>Título de la incidencia<input name="title" maxlength="120" required placeholder="¿Qué necesita el servicio técnico?"></label><label id="ticket-description-label" hidden>Descripción (opcional)<textarea name="description" maxlength="1000" rows="4" placeholder="Cuéntame un poco más"></textarea></label><p id="compose-feedback" class="feedback" role="status"></p><button>Enviar incidencia</button></form>
 </dialog>
 <dialog id="detail" aria-label="Detalle de la incidencia"><div class="dialog-top"><span class="label">Incidencia</span><button id="back" class="quiet" aria-label="Cerrar incidencia">×</button></div><div id="thread"></div></dialog>
 </body>
