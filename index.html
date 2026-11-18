@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff4ed">
+<title>Soporte Técnico de Novios</title>
+<link rel="manifest" href="./app.webmanifest">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAEFUlEQVR4nO3dzbEbVRSF0WuKZEiECMiEATFQBZkQJAO5xEPv19qt7n3Ua409OH3u19ey7Hr+9tcvvy64109HD8BsAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiLy89EDbOD3f/78+Bf8/dsf+0xyo3awDX2b+3+mfno8r+1zYLWDPcK8gO44ntcecWC1gz3UpIA2OaGrbY+qebaHGhPQtid0lR9V7WD7GBDQg07opftOq3awPbX/MX6HQ2rW//i9N9D+u/v66948287abyDKld5AB17dH7/rtYMdpfEG6v+N/xCda6kL6PA1fTBA82xH6QqoZEFvjtE824G6AmKcooCq3q2bYZpnO1ZRQEzUElDVW3VxHal5tsO1BMRQFV8k9rxPszR8tegGIiIgIgIicnxAPgDdrWF1xwfEaAIiIiAiAiIiICICIiIgIscH1PAXOkM1rO74gBhNQEQERKQioIbfy8cpWVpFQMzVElDJ+zRFz7paAmIoAREpCqjnWi5XtaiigJioK6Cqd6tT24q6AmKcuoDa3rAqhcupC2hVrqlB51oaA1qtyzpQ7UJKA2KK3oBq37n9Na+iN6DVvbjdlC+hOqBVv75H63/89oDWhCU+yIgHHxDQGrLKbU155BkBrTkL3cSghx0T0Bq11sSsx5wU0Jq23DuMe8BhAa2BK/66iY82L6A1c9GfGvpQIwNaY9f9nrmPMzWgNXnpN0Y/yOCA1vDVX0x/hIqfVJ9r+HmlP2p6Ohezb6CrcYcxbuD3PElAa9SRDBr1U88T0BpyMCOG/LqnCmjVH0/5eHd4toBW8SHVDpZ4woBW5VEVjrSJ5wxolR1Y1TDbetqAVs2xlYzxIE/yReLHjvqa8bnTuXjmG+jqkIM8Qz3rJAGt3Y/zJPWs8wS0djzU89SzThXQ2uVoT1XPOsmH6Nce8bH6bOlcnOsGYnMnDWjz2+Kc1886bUBr0yM/bT3rtJ+BXko+D505nYvz3kBsQkD33yKunyWgiztSUM+FgL77oSDUcyWg/3wxC/W8JKD/+TQO9dwQEBEB3frgjnH9vCYgIgJ6w5s3jevnTQJ6200u6nmPgIgI6F3XW8f18wEBEREQEQER8Q/KiLiBiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICI/AvY9ujfUWk8fAAAAABJRU5ErkJggg==">
+<style>
+:root{color-scheme:light;font-family:"Trebuchet MS",system-ui,sans-serif;color:#352727;background:#fff4ed;--wine:#8c2946;--muted:#705957;--line:#edd4cd}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0}main{max-width:790px;margin:auto;padding:20px clamp(17px,5vw,40px)}
+header,.row{display:flex;align-items:center;gap:12px;justify-content:space-between}header{justify-content:flex-start;font-weight:800}#logout{margin-left:auto}.brand{display:grid;place-items:center;border-radius:14px;width:44px;height:44px;background:var(--wine);color:white;font-size:23px}
+.hero{margin:24px 0;padding:clamp(24px,7vw,60px);border-radius:27px;background:radial-gradient(ellipse at 95% 5%,#f3aabe 0,transparent 57%),#f9d9d7;color:#5c2338}.eyebrow{letter-spacing:.16em;font-size:.69rem;font-weight:800}h1{font-family:Georgia,serif;font-size:clamp(2.8rem,9vw,5.8rem);line-height:.94;letter-spacing:-.06em;margin:17px 0 20px}h1 span{color:var(--wine)}h2{font-size:1.15rem;margin:0 0 12px}p{margin:8px 0;line-height:1.5}
+.panel,dialog{background:#fffbf8;border-radius:21px;border:1px solid var(--line);padding:clamp(16px,4vw,24px);margin:14px 0;box-shadow:0 6px 20px #6f31360a}.notice{background:#fce8e4}.notice p,small{color:var(--muted)}.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}
+button{background:var(--wine);color:white;border:0;border-radius:12px;padding:11px 15px;min-height:44px;font:inherit;font-weight:700;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.preset,.ticket{background:#f8e5e3;color:#67253b}.quiet{background:transparent;color:var(--wine)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #a84565;outline-offset:3px}
+input,textarea{display:block;width:100%;min-width:0;margin-top:6px;margin-bottom:12px;border:1px solid var(--line);background:white;border-radius:10px;padding:11px;font:inherit;font-size:16px;color:inherit}label{display:block;font-size:.9rem;font-weight:700}.history{margin-top:22px}.ticket{text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0;overflow-wrap:anywhere}.ticket small{flex-shrink:0}.history h2{margin:0}
+dialog{width:min(94vw,620px);max-height:88dvh;margin:auto;color:inherit}dialog::backdrop{background:#35182176}dialog h2,.reply{overflow-wrap:anywhere}.reply{background:#f8e5e3;padding:12px;border-radius:12px;margin:8px 0;white-space:pre-wrap}audio{display:block;max-width:100%;margin-top:7px}#status{color:#702039}footer{text-align:center;margin:15px 0}
+</style>
+<script type="module">
+const config = { url: "", key: "", pushKey: "" };
+
+
+const $ = id => document.getElementById(id);
+const demo = !config.url;
+const demoName = "Soporte";
+const presetTitles = ["Mi novio está demasiado lejos", "Necesito que me hagas reír", "Te echo de menos", "Solicito un abrazo"];
+let db, member, tickets = [], recordingCancel;
+const registration = navigator.serviceWorker?.register("./sw.js").catch(() => null);
+const date = value => new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+const params = new URL(location.href).searchParams;
+
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+
+function report(message) {
+  $("status").textContent = message;
+}
+
+function run(control, action, feedback = report) {
+  if (control) control.disabled = true;
+  return (async () => action())().catch(error => feedback(error.message))
+    .finally(() => { if (control) control.disabled = false; });
+}
+
+function saveDemo() {
+  localStorage.setItem("soporte-demo", JSON.stringify(tickets));
+}
+
+async function value(query) {
+  const { data, error } = await query;
+  if (error) throw Error(error.message);
+  return data;
+}
+
+async function loadTickets() {
+  if (!demo) {
+    tickets = await value(db.from("tickets").select("*,author:members(name)").order("created_at", { ascending: false }));
+  }
+  const list = $("tickets");
+  list.replaceChildren();
+  if (!tickets.length) list.append(element("p", "Todavía no hay incidencias."));
+  for (const ticket of tickets) {
+    const button = element("button", "", "ticket");
+    button.append(element("span", ticket.title), element("small", ticket.closed ? "Resuelto 💛" : "Abierto"));
+    button.onclick = () => run(button, () => openTicket(ticket.id));
+    list.append(button);
+  }
+}
+
+async function createTicket(title) {
+  title = title.trim();
+  if (!title) throw Error("Escribe un título para el ticket.");
+  let id;
+  if (demo) {
+    id = crypto.randomUUID();
+    tickets.unshift({ id, title, author: { name: demoName }, created_at: new Date(), replies: [] });
+    saveDemo();
+  } else {
+    const ticket = await value(db.from("tickets").insert({ title, author_id: member.id }).select("id").single());
+    id = ticket.id;
+  }
+  await loadTickets();
+  await openTicket(id);
+}
+
+async function openTicket(id) {
+  const ticket = tickets.find(row => row.id === id);
+  if (!ticket) return;
+  const replies = demo ? ticket.replies : await value(db.from("replies")
+    .select("*,author:members(name)").eq("ticket_id", id).order("created_at"));
+  const thread = $("thread");
+  thread.replaceChildren(element("h2", ticket.title), element("small",
+    `${ticket.author.name} · ${date(ticket.created_at)} · ${ticket.closed ? "Resuelto 💛" : "Abierto"}`));
+  for (const reply of replies) {
+    const card = element("div", "", "reply");
+    card.append(element("small", `${reply.author.name} · ${date(reply.created_at)}`));
+    if (reply.body) card.append(element("p", reply.body));
+    if (reply.audio) {
+      const player = document.createElement("audio");
+      player.controls = true;
+      player.preload = "none";
+      player.src = reply.audio;
+      card.append(player);
+    }
+    thread.append(card);
+  }
+  const feedback = element("p", "");
+  feedback.setAttribute("role", "status");
+  const explain = message => { feedback.textContent = message; };
+  async function reply(fields) {
+    if (demo) {
+      ticket.replies.push({ ...fields, author: { name: demoName }, created_at: new Date() });
+      saveDemo();
+    } else {
+      await value(db.from("replies").insert({ ...fields, ticket_id: id, author_id: member.id }));
+    }
+    await openTicket(id);
+  }
+
+  const form = document.createElement("form");
+  const label = element("label", "Tu respuesta");
+  const input = document.createElement("textarea");
+  input.required = true;
+  input.maxLength = 1000;
+  label.append(input);
+  const send = element("button", "Enviar respuesta");
+  form.append(label, send);
+  form.onsubmit = event => {
+    event.preventDefault();
+    const body = input.value.trim();
+    if (body) run(send, () => reply({ body }), explain);
+  };
+  const mic = element("button", "Grabar audio", "quiet");
+  mic.onclick = () => run(mic, () => record(mic, reply, explain), explain);
+  const toggle = element("button", ticket.closed ? "Sigo esperando mi abrazo" : "Marcar como resuelto 💛", "quiet");
+  toggle.onclick = () => run(toggle, async () => {
+    if (demo) {
+      ticket.closed = !ticket.closed;
+      saveDemo();
+    } else {
+      await value(db.from("tickets").update({ closed: !ticket.closed }).eq("id", id));
+    }
+    await loadTickets();
+    await openTicket(id);
+  }, explain);
+  thread.append(feedback, form, mic, toggle);
+  if (!$("detail").open) $("detail").showModal();
+}
+
+async function record(button, reply, feedback) {
+  if (recordingCancel) {
+    recordingCancel(true);
+    return;
+  }
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) throw Error("Abre la web en Safari o Chrome para grabar.");
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  if (!$("detail").open || !button.isConnected) {
+    stream.getTracks().forEach(track => track.stop());
+    return;
+  }
+  let recorder;
+  try {
+    recorder = new MediaRecorder(stream, { audioBitsPerSecond: 32000 });
+  } catch (error) {
+    stream.getTracks().forEach(track => track.stop());
+    throw error;
+  }
+  const chunks = [];
+  let sendAudio = false;
+  recorder.ondataavailable = event => chunks.push(event.data);
+  recorder.onstop = () => {
+    stream.getTracks().forEach(track => track.stop());
+    if (!sendAudio || !$("detail").open || !button.isConnected) return;
+    const blob = new Blob(chunks, { type: (recorder.mimeType || chunks[0]?.type || "audio/webm").split(";")[0] });
+    if (!blob.size || blob.size > 750000) return feedback("Prueba con un audio más corto.");
+    const reader = new FileReader();
+    reader.onload = () => run(button, () => reply({ audio: reader.result }), feedback);
+    reader.onerror = () => feedback("No se pudo leer el audio.");
+    reader.readAsDataURL(blob);
+  };
+  recorder.onerror = () => {
+    recordingCancel?.(false);
+    stream.getTracks().forEach(track => track.stop());
+    feedback("Se ha interrumpido la grabación.");
+  };
+  try {
+    recorder.start();
+  } catch (error) {
+    stream.getTracks().forEach(track => track.stop());
+    throw error;
+  }
+  button.textContent = "Parar y enviar audio";
+  feedback("Grabando… hasta 30 segundos. Cierra el ticket para cancelar.");
+  const timer = setTimeout(() => recordingCancel?.(true), 30000);
+  recordingCancel = send => {
+    clearTimeout(timer);
+    recordingCancel = null;
+    sendAudio = send;
+    if (recorder.state !== "inactive") recorder.stop();
+    button.textContent = "Grabar audio";
+    feedback(send ? "Preparando audio…" : "");
+  };
+}
+
+function showSettings() {
+  $("settings").hidden = false;
+  if (demo) $("push-help").textContent = "Modo demo. Los avisos entre móviles se activan al conectar Supabase.";
+  else if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !navigator.standalone && !matchMedia("(display-mode: standalone)").matches) {
+    $("push-help").textContent = "En Safari, toca Compartir → Añadir a pantalla de inicio. Abre la web desde su icono y vuelve a tocar Activar notificaciones.";
+  }
+}
+
+async function activatePush() {
+  if (demo) return showSettings();
+  if (!window.PushManager || !window.Notification || !registration) {
+    if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !navigator.standalone && !matchMedia("(display-mode: standalone)").matches) return showSettings();
+    showSettings();
+    throw Error("Para activar los avisos, sigue las instrucciones de arriba o abre la web en un navegador compatible.");
+  }
+  if (!config.pushKey) throw Error("Falta configurar la clave pública de notificaciones.");
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") throw Error("Puedes permitir los avisos desde los ajustes del navegador o del móvil.");
+  const worker = await registration;
+  if (!worker) throw Error("No se pudo preparar este móvil para los avisos.");
+  const sub = await worker.pushManager.getSubscription() ?? await worker.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: config.pushKey,
+  });
+  await value(db.from("subscriptions").upsert({ member_id: member.id, endpoint: sub.endpoint, payload: sub.toJSON() }));
+  $("push-help").textContent = "Avisos activados en este dispositivo.";
+}
+
+async function start() {
+  if (demo) {
+    report("Modo demo · Los cambios se guardan en este navegador.");
+    tickets = JSON.parse(localStorage.getItem("soporte-demo") || "null") ?? [{
+      id: "bienvenida", title: "Incidencia #001 · El teletransporte sigue en mantenimiento",
+      author: { name: "Soporte" }, created_at: new Date(), replies: [{
+        author: { name: "Soporte" }, created_at: new Date(),
+        body: "Hemos intentado reiniciar al novio. Sigue echándote de menos 💛",
+      }],
+    }];
+  } else {
+    const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.89.0/+esm");
+    db = createClient(config.url, config.key);
+    const { session } = await value(db.auth.getSession());
+    if (!session) {
+      $("login").hidden = false;
+      return;
+    }
+    $("logout").hidden = false;
+    member = await value(db.from("members").select("id,name").eq("id", session.user.id).maybeSingle());
+    if (!member) throw Error("Esta cuenta todavía no tiene acceso al servicio técnico.");
+  }
+  await loadTickets();
+  $("app").hidden = false;
+  if (!sessionStorage.getItem("soporte-push-later")) showSettings();
+  if (params.has("ticket")) await openTicket(params.get("ticket"));
+}
+
+for (const title of presetTitles) {
+  const button = element("button", title, "preset");
+  button.onclick = () => run(button, () => createTicket(title));
+  $("presets").append(button);
+}
+$("login").onsubmit = event => {
+  event.preventDefault();
+  const form = new FormData(event.target);
+  run(event.submitter, async () => {
+    await value(db.auth.signInWithPassword({ email: form.get("email"), password: form.get("password") }));
+    location.reload();
+  });
+};
+$("logout").onclick = () => run($("logout"), async () => {
+  await value(db.auth.signOut());
+  location.reload();
+});
+$("new-ticket").onsubmit = event => {
+  event.preventDefault();
+  run(event.submitter, async () => {
+    await createTicket(new FormData(event.target).get("title"));
+    event.target.reset();
+  });
+};
+$("reboot").onclick = () => report("Reinicio completado. Sigue echándote de menos 💛");
+$("refresh").onclick = () => run($("refresh"), loadTickets);
+$("back").onclick = () => $("detail").close();
+$("detail").onclose = () => recordingCancel?.(false);
+$("show-settings").onclick = () => {
+  showSettings();
+  $("settings").scrollIntoView({ behavior: "smooth" });
+};
+$("later").onclick = () => {
+  sessionStorage.setItem("soporte-push-later", "1");
+  $("settings").hidden = true;
+};
+$("push").onclick = () => run($("push"), activatePush, message => { $("push-help").textContent = message; });
+run(null, start);
+</script>
+<main>
+<header><span class="brand">♥</span><span>Soporte Técnico de Novios</span><button id="logout" class="quiet" hidden>Salir</button></header>
+<section class="hero"><p class="eyebrow">DEPARTAMENTO DE ABRAZOS</p><h1>Para cuando<br>estamos lejos<span>.</span></h1><p>El teletransporte sigue en mantenimiento.</p></section>
+<p id="status" role="status"></p>
+<form id="login" class="panel" hidden>
+<h2>Entrar al servicio técnico</h2>
+<label>Correo <input name="email" type="email" autocomplete="username" required></label>
+<label>Contraseña <input name="password" type="password" autocomplete="current-password" required></label>
+<button>Entrar</button>
+</form>
+<div id="app" hidden>
+<section id="settings" class="panel notice" hidden><div><h2>Notificaciones</h2><p id="push-help">Entérate cuando llegue un ticket o te respondan.</p></div><div><button id="push">Activar notificaciones</button><button id="later" class="quiet">Ahora no</button></div></section>
+<section class="panel"><h2>Abrir una incidencia</h2><div id="presets" class="presets"></div>
+<form id="new-ticket"><label>Escribe la tuya<input name="title" maxlength="120" required placeholder="¿Qué necesita el servicio técnico?"></label><button>Enviar ticket</button></form>
+<button class="quiet" id="reboot">↻ Reiniciar novio</button>
+</section>
+<section class="history"><div class="row"><h2>Vuestros tickets</h2><button class="quiet" id="refresh">Actualizar</button></div><div id="tickets"></div></section>
+<footer><button class="quiet" id="show-settings">Ajustes de notificaciones</button></footer>
+</div>
+<dialog id="detail"><div id="thread"></div><button id="back" class="quiet">Volver al historial</button></dialog>
+</main>
+</html>
