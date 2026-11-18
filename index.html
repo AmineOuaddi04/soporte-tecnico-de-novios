@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#141514">
-<title>Soporte Técnico de Novios</title>
+<title>Entre tú y yo</title>
 <link rel="manifest" href="./app.webmanifest">
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAEFUlEQVR4nO3dzbEbVRSF0WuKZEiECMiEATFQBZkQJAO5xEPv19qt7n3Ua409OH3u19ey7Hr+9tcvvy64109HD8BsAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiLy89EDbOD3f/78+Bf8/dsf+0xyo3awDX2b+3+mfno8r+1zYLWDPcK8gO44ntcecWC1gz3UpIA2OaGrbY+qebaHGhPQtid0lR9V7WD7GBDQg07opftOq3awPbX/MX6HQ2rW//i9N9D+u/v66948287abyDKld5AB17dH7/rtYMdpfEG6v+N/xCda6kL6PA1fTBA82xH6QqoZEFvjtE824G6AmKcooCq3q2bYZpnO1ZRQEzUElDVW3VxHal5tsO1BMRQFV8k9rxPszR8tegGIiIgIgIicnxAPgDdrWF1xwfEaAIiIiAiAiIiICICIiIgIscH1PAXOkM1rO74gBhNQEQERKQioIbfy8cpWVpFQMzVElDJ+zRFz7paAmIoAREpCqjnWi5XtaiigJioK6Cqd6tT24q6AmKcuoDa3rAqhcupC2hVrqlB51oaA1qtyzpQ7UJKA2KK3oBq37n9Na+iN6DVvbjdlC+hOqBVv75H63/89oDWhCU+yIgHHxDQGrLKbU155BkBrTkL3cSghx0T0Bq11sSsx5wU0Jq23DuMe8BhAa2BK/66iY82L6A1c9GfGvpQIwNaY9f9nrmPMzWgNXnpN0Y/yOCA1vDVX0x/hIqfVJ9r+HmlP2p6Ohezb6CrcYcxbuD3PElAa9SRDBr1U88T0BpyMCOG/LqnCmjVH0/5eHd4toBW8SHVDpZ4woBW5VEVjrSJ5wxolR1Y1TDbetqAVs2xlYzxIE/yReLHjvqa8bnTuXjmG+jqkIM8Qz3rJAGt3Y/zJPWs8wS0djzU89SzThXQ2uVoT1XPOsmH6Nce8bH6bOlcnOsGYnMnDWjz2+Kc1886bUBr0yM/bT3rtJ+BXko+D505nYvz3kBsQkD33yKunyWgiztSUM+FgL77oSDUcyWg/3wxC/W8JKD/+TQO9dwQEBEB3frgjnH9vCYgIgJ6w5s3jevnTQJ6200u6nmPgIgI6F3XW8f18wEBEREQEQER8Q/KiLiBiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICI/AvY9ujfUWk8fAAAAABJRU5ErkJggg==">
 <style>
@@ -369,7 +369,7 @@ function showView(view) {
   $("settings").hidden = !settings;
   $("page-title").textContent = settings ? "Notificaciones" : remembering ? "Me acordé de ti" : "Para cuando estamos lejos.";
   $("description").textContent = settings ? "Para enterarte cuando el otro se acuerde de ti." : remembering ? "Fotos y notas de las cosas que nos recuerdan al otro." : "El teletransporte sigue en mantenimiento.";
-  $("breadcrumb").textContent = settings ? "Preferencias" : "Entre tú y yo";
+  $("breadcrumb").textContent = settings ? "Preferencias" : remembering ? "Recuerdos" : "Incidencias";
   document.querySelectorAll("[data-view]").forEach(button => {
     if (button.dataset.view === view) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
@@ -527,7 +527,7 @@ run(null, start);
 <body>
 <div class="workspace">
 <aside class="sidebar">
-<a class="identity" href="./"><span class="mark" aria-hidden="true">♡</span><span>Soporte técnico<small>de novios</small></span></a>
+<a class="identity" href="./"><span class="mark" aria-hidden="true">♡</span><span>Entre tú y yo</span></a>
 <nav aria-label="Secciones">
 <button class="nav" data-view="history" aria-current="page"><span aria-hidden="true">▤</span> Incidencias</button>
 <button class="nav" data-view="memories" hidden><span aria-hidden="true">♡</span> Me acordé de ti</button>
@@ -536,7 +536,7 @@ run(null, start);
 <div class="sidebar-footer"><span class="signal"></span><span id="connection">Conectando</span><button id="logout" class="quiet" hidden>Salir</button></div>
 </aside>
 <main>
-<div class="topbar"><span id="breadcrumb">Entre tú y yo</span><button id="compose" hidden>＋ Nueva incidencia</button></div>
+<div class="topbar"><span id="breadcrumb">Incidencias</span><button id="compose" hidden>＋ Nueva incidencia</button></div>
 <section class="intro"><h1 id="page-title">Para cuando estamos lejos.</h1><p id="description">El teletransporte sigue en mantenimiento.</p></section>
 <p id="status" class="feedback" role="status"></p>
 <form id="login" class="panel login" hidden>
